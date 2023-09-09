@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhblogs.tushusyetm.mapper.BkUserMapper">
+
+<delete id="editPasswordById">
+        update bk_user set password = 'f379eaf3c831b04de153469d1bec345e' where id = #{id}
+    </delete>
+
+<delete id="editCheckStatus">
+    update bk_user set check_status = #{checkStatus} where id = #{id}
+    </delete>
+
+<select id="queryByUsernameOrPassword" resultType="com.xhblogs.tushusyetm.entity.BkUser">
+    select * from bk_user
+    <trim prefix="where" prefixOverrides="and|or">
+        <if test="username != null and username != ''">
+            username = #{username}
+        </if>
+        <if test="studentId != null and studentId != ''">
+            and student_id = #{studentId}
+        </if>
+    </trim>
+</select>
+</mapper>

@@ -1,0 +1,27 @@
+#端口号配置
+server:
+  port: 9090
+#数据库连接配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/systemsql?useSSL=true&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+#jwt配置
+jwt:
+  secret: com.xhblogs.tushusyetm
+  #30分钟过期
+  expiration: 1800000
+#mybatis plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #配置mybatis plus 在更新时只更新非空和非NULL的字段
+      update-strategy: not_empty
+
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd} [%thread] %-5level %logger- %msg%n'

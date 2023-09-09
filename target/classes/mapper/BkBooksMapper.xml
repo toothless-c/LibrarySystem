@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhblogs.tushusyetm.mapper.BkBooksMapper">
+
+    <select id="queryByClassifyId" resultType="com.xhblogs.tushusyetm.entity.BkBooks">
+        select bk_books.name ,bk_books.s_m,bk_books.author,bk_books.price from
+        bk_books
+        where
+        bk_books.classify_id = #{id}
+    </select>
+    <resultMap id="BkClassifyMap" type="com.xhblogs.tushusyetm.entity.BkClassify">
+        <result column="classify_id" property="classifyId"></result>
+        <result column="classify_name" property="classifyName"></result>
+    </resultMap>
+    <resultMap id="BkbookMap" type="com.xhblogs.tushusyetm.entity.BkBooks">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="book_place_num" property="bookPlaceNum"></result>
+        <result column="author" property="author"></result>
+        <result column="number" property="number"></result>
+        <result column="price" property="price"></result>
+        <result column="s_m" property="sM"></result>
+        <association property="bkClassify"  javaType="java.lang.String"  resultMap="BkClassifyMap"></association>
+    </resultMap>
+
+<!--    <select id="QueryAllByNameAndSsm" resultMap="BkbookMap">-->
+<!--        select bk.id,bk.name,bk.book_place_num,bk.s_m,bk.author,bk.price,bk.number,fl.classify_name from-->
+<!--        bk_books as bk,bk_classify as fl where bk.classify_id = fl.classify_Id-->
+<!--        <trim prefix="and" prefixOverrides="or">-->
+<!--            <if test="parm.sM != null and parm.sM != ''">-->
+<!--                bk.name = #{parm.sM}-->
+<!--            </if>-->
+<!--            <if test="parm.name != null and parm.name != ''">-->
+<!--                or bk.sm = #{parm.name}-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--    </select>-->
+    <select id="QueryAllByNameAndSsm" resultType="com.xhblogs.tushusyetm.entity.BkBooks">
+        select b.*,c.classify_name  from bk_books   as b , bk_classify  as c where  b.classify_id  = c.classify_Id
+        <if test="bookparm.name != null and bookparm.name != ''">
+            and b.name like CONCAT('%',${bookparm.name},'%')
+        </if>
+        <if test="bookparm.SM != null and bookparm.SM != ''">
+            and b.s_m like CONCAT('%',${bookparm.SM},'%')
+        </if>
+    </select>
+
+    <delete id="subBook">
+        update bk_books  set number  = number -1 where id  = #{bookId} and number  > 0
+    </delete>
+
+    <delete id="addBook">
+        update bk_books set number = number + 1 where id = #{bookId}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO boorow_book  ( book_id, reader_id, borrow_time ,borrow_status,return_time )
+        VALUES  ( #{parm.bookId}, #{parm.readerId}, #{parm.borrowTime},#{parm.borrowStatus},#{parm.returnTime} )
+    </insert>
+
+</mapper>

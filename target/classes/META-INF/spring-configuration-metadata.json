@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "jwt",
+      "type": "com.xhblogs.tushusyetm.config.JwtUtils",
+      "sourceType": "com.xhblogs.tushusyetm.config.JwtUtils"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "sourceType": "com.xhblogs.tushusyetm.config.JwtUtils"
+    },
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.xhblogs.tushusyetm.config.JwtUtils"
+    }
+  ],
+  "hints": []
+}

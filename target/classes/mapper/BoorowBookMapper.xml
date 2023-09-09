@@ -1,0 +1,55 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhblogs.tushusyetm.mapper.BoorowBookMapper">
+<resultMap id="BkbookMap" type="com.xhblogs.tushusyetm.entity.BkBooks">
+    <result column="id" property="id"></result>
+   <result column="name" property="name"></result>
+    <result column="book_place_num" property="bookPlaceNum"></result>
+</resultMap>
+    <resultMap id="BkUserMap" type="com.xhblogs.tushusyetm.entity.BkUser">
+        <result column="user_id" property="id"></result>
+        <result column="username" property="username"></result>
+        <result column="student_id" property="studentId"></result>
+        <result column="class_name" property="className"></result>
+        <result column="phone" property="phone"></result>
+    </resultMap>
+    <resultMap id="BoorowMap" type="com.xhblogs.tushusyetm.entity.BoorowBook">
+        <result column="boorw_id" property="id"></result>
+        <result column="borrow_time" property="borrowTime"></result>
+        <result column="return_time" property="returnTime"></result>
+        <result column="borrow_status" property="borrowStatus"></result>
+        <result column="check_status" property="checkStatus"></result>
+<!--        <result column="book_id" property="bookId"></result>-->
+<!--        <result column="reader_id" property="readerId"></result>-->
+        <association property="bkBooks" javaType="java.util.List" resultMap="BkbookMap"></association>
+        <association property="bkUser" javaType="java.util.List" resultMap="BkUserMap"></association>
+    </resultMap>
+<select id="getBorrowList" resultType="com.xhblogs.tushusyetm.entity.BoorowBook" resultMap="BoorowMap">
+    select sb.id as user_id,b.id as boorw_id ,sb.name,sb.book_place_num, sr.username,sr.student_id,sr.class_name,
+           sr.phone,b.borrow_time,b.return_time,b.borrow_status
+    from  boorow_book as b left join bk_books as sb on b.book_id = sb.id
+                           left join bk_user as sr  on b.reader_id = sr.id
+    where 1=1
+    <if test="parm.studentId != null and parm.studentId != ''">
+        and sb.id = #{parm.studentId}
+    </if>
+    <if test="parm.borrowStatus !=null and parm.borrowStatus!= ' '">
+        and b.borrow_status = #{parm.borrowStatus}
+    </if>
+    order by b.borrow_time
+  </select>
+
+<select id="getLookBorrowList" resultMap="BoorowMap">
+    select c.id,c.name,c.book_place_num,b.username,b.class_name,b.phone,
+           a.borrow_time,a.return_time ,a.borrow_status,a.check_status
+    from boorow_book as a,bk_user as b,bk_books as c where a.book_id = c.id and a.reader_id=b.id
+    <if test="parms.id != null">
+        and b.id = #{parms.id}
+    </if>
+    <if test="parms.bookName != null and parms.bookName != ''">
+        and c.name = #{parms.bookName}
+    </if>
+    </select>
+</mapper>
